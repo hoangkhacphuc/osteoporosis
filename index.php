@@ -5,7 +5,55 @@ if (!isset($_SESSION['User_ID'])) {
     return;
 }
 include './database.php';
+
+$sql = "SELECT * FROM `member` WHERE `id` = '$_SESSION[User_ID]' AND `user_type` = 1";
+$result = mysqli_query($conn, $sql);
+$result = mysqli_num_rows($result);
+if ($result > 0) {
+    header('Location: admin.php');
+    return;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['Name']) || !isset($_POST['Year']) || !isset($_POST['Sex']) || !isset($_POST['Height']) || !isset($_POST['Weight']) || !isset($_POST['Cholesterol']))
+    {
+        echo json_encode(array('message' => 'Thiếu thông tin'));
+        return;
+    }
+    // Gán giá trị
+    $Name = $_POST['Name'];
+    $Year = $_POST['Year'];
+    $Sex = $_POST['Sex'];
+    $Height = $_POST['Height'];
+    $Weight = $_POST['Weight'];
+    $Cholesterol = $_POST['Cholesterol'];
+    $member_id = $_SESSION['User_ID'];
+
+    $phone = '';
+    $address = '';
+    if (isset($_POST['Phone'])) {
+        $phone = $_POST['Phone'];
+    }
+    if (isset($_POST['Address'])) {
+        $address = $_POST['Address'];
+    }
+
+    if (!is_numeric($Year) || !is_numeric($Sex) || !is_numeric($Height) || !is_numeric($Weight) || !is_numeric($Cholesterol))
+    {
+        echo json_encode(array('message' => 'Thông tin không hợp lệ'));
+        return;
+    }
+
+    // Insert to table calculate : member_id, name, birth, gender, height, weight, cholesterol, phone, address
+    $sql = "INSERT INTO `calculate` (`member_id`, `name`, `birth`, `gender`, `height`, `weight`, `cholesterol`, `phone`, `address`) VALUES ('$member_id', '$Name', '$Year', '$Sex', '$Height', '$Weight', '$Cholesterol', '$phone', '$address')";
+    $result = mysqli_query($conn, $sql);
+    if (!$result)
+    {
+        echo json_encode(array('message' => 'Có lỗi xảy ra'));
+        return; 
+    }
+    echo json_encode(array('message' => 'Thành công'));
+    return;
 }
 ?>
 
@@ -18,7 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./index.css" />
     <title>Form</title>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 
 </head>
 
@@ -89,6 +136,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             loãng xương của bệnh nhân dựa trên T-score cổ xương đùi.</p>
     </div>
     <div class="footer"></div>
+    <!-- aJax cdn -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="./index.js"></script>
 </body>
 

@@ -31,7 +31,8 @@ WeightInput.addEventListener('change', (e) => {
 
 btn.addEventListener('click', () => {
   if (name === '' || year === '' || Height === '' || Weight === '') {
-    alert('Vui lòng nhập đầy đủ thông tin');
+    // alert('Vui lòng nhập đầy đủ thông tin');
+    return;
   } else {
     let bmiTemp = Weight / ((Height / 100) * (Height / 100));
     if (bmiTemp >= 40) {
@@ -66,7 +67,7 @@ btn.addEventListener('click', () => {
         sex = sexInput[i].value;
       }
     }
-    console.log(parseInt(bmiTemp, 10), BMI, YearResult, Cholesterol);
+    // console.log(parseInt(bmiTemp, 10), BMI, YearResult, Cholesterol);
     let result = (BMI + Cholesterol + YearResult);
     PrintResult.innerHTML = `<div style="text-align: center">
     <h2>Kết quả:</h2>
@@ -75,4 +76,40 @@ btn.addEventListener('click', () => {
     <p>Tỉ lệ loãng xương: ${result}%</p>
   </div>`;
   }
+});
+
+
+
+$(document).ready(function () {
+    $('#btn').click(function (e) { 
+        e.preventDefault();
+
+        let data = {
+            Name: $('#Name').val(),
+            Year: $('#Year').val(),
+            Height: $('#Height').val(),
+            Weight: $('#Weight').val(),
+            Cholesterol: $('#Cholesterol').val() == "NoVal" ? 0 : ($('#Cholesterol').val() == 240 ? 2 : 1),
+            Phone: $('#SDT').val(),
+            Address: $('#Address').val(),
+            Sex: $('input[name="Sex"]:checked').val() == "Nam" ? 1 : 0,
+        };
+        // POST request
+        $.ajax({
+            url: './index.php',
+            type: 'POST',
+            data: data
+        })
+        .done(function (data) {
+            data = JSON.parse(data);
+            alert(data.message);
+        }
+        )
+        .fail(function () {
+            alert("Có lỗi xảy ra");
+        }
+        );
+
+        
+    });
 });

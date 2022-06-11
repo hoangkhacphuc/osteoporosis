@@ -5,6 +5,7 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+DROP DATABASE IF EXISTS `osteoporosis`;
 CREATE DATABASE IF NOT EXISTS `osteoporosis` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `osteoporosis`;
 
@@ -21,6 +22,13 @@ CREATE TABLE `calculate` (
   `address` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `calculate` (`id`, `member_id`, `name`, `birth`, `gender`, `height`, `weight`, `cholesterol`, `phone`, `address`, `created_at`) VALUES
+(1, 1, 'Nguyễn Văn A', 2000, 1, 150, 50, 0, '', '', '2022-06-11 15:19:22'),
+(2, 1, 'Nguyễn Văn B', 2001, 1, 160, 52, 1, '0123123123', 'Hà Nội', '2022-06-11 15:19:55'),
+(3, 1, 'Nguyễn Văn B', 2001, 1, 160, 56, 2, '0123123123', 'Hà Nội', '2022-06-11 15:20:12'),
+(4, 1, 'Nguyễn Văn C', 2001, 1, 165, 56, 1, '0123123123', 'Hà Nội', '2022-06-11 15:20:33'),
+(5, 1, 'Nguyễn Thị D', 2000, 0, 155, 52, 1, '0321321321', 'Hà Đông', '2022-06-11 15:22:40');
 
 CREATE TABLE `member` (
   `id` int(11) NOT NULL,
@@ -43,7 +51,7 @@ ALTER TABLE `member`
 
 
 ALTER TABLE `calculate`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 ALTER TABLE `member`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
